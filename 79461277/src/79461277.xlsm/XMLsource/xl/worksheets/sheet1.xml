@@ -4,7 +4,7 @@
   <dimension ref="X18:Y18" />
   <sheetViews>
     <sheetView topLeftCell="U1" workbookViewId="0">
-      <selection activeCell="Y15" sqref="Y15" />
+      <selection activeCell="Y18" sqref="Y18" />
     </sheetView>
   </sheetViews>
   <sheetFormatPr defaultRowHeight="15" x14ac:dyDescent="0.25" />
@@ -16,7 +16,7 @@
       <c r="X18" t="s">
         <v>0</v>
       </c>
-      <c r="Y18" s="1" t="s">
+      <c r="Y18" t="s">
         <v>31</v>
       </c>
     </row>
