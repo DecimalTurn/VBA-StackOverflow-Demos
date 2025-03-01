@@ -10,7 +10,11 @@ Private Sub DataPull()
     CsvUrl = "https://raw.githubusercontent.com/DecimalTurn/VBA-StackOverflow-Demos/refs/heads/main/data/csv/sample_data1.csv"
     'CsvUrl = ThisWorkbook.Worksheets("Settings").Range("Y18").Value2
 
-    Wb.Queries.Item("sample_data1").Delete
+    'Delete query if it exists
+    On Error Resume Next
+        Wb.Queries.Item("sample_data1").Delete
+    On Error GoTo 0
+    
     Wb.Queries.Add Name:="sample_data1", _
         Formula:= _
         "let" & Chr(13) & "" & Chr(10) & _

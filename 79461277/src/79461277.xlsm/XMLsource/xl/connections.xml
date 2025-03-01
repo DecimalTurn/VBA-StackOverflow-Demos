@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <connections xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="xr16" xmlns:xr16="http://schemas.microsoft.com/office/spreadsheetml/2017/revision16">
-  <connection id="1" xr16:uid="{C8899D92-8889-458E-9E89-301FBE54243A}" keepAlive="1" name="Connection2" type="5" refreshedVersion="0" background="1" saveData="1">
+  <connection id="1" xr16:uid="{3F6AC413-A8E3-421F-AAB6-964504C1152E}" keepAlive="1" name="Connection2" type="5" refreshedVersion="8" background="1" saveData="1">
     <dbPr connection="Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=sample_data1;Extended Properties=&quot;&quot;" command="SELECT * FROM [sample_data1]" />
   </connection>
-  <connection id="2" xr16:uid="{7CD77B56-6E9E-4245-AE8E-4D7313B29F17}" keepAlive="1" name="Connection3" type="5" refreshedVersion="8" background="1" saveData="1">
-    <dbPr connection="Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=sample_data1;Extended Properties=&quot;&quot;" command="SELECT * FROM [sample_data1]" />
+  <connection id="2" xr16:uid="{7CD77B56-6E9E-4245-AE8E-4D7313B29F17}" keepAlive="1" name="Connection3" type="5" refreshedVersion="0" background="1">
+    <dbPr connection="Provider=Microsoft.Mashup.OleDb.1;Data Source=$Workbook$;Location=sample_data1;Extended Properties=&quot;&quot;" commandType="0" />
   </connection>
 </connections>
