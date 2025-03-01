@@ -844,15 +844,15 @@ Public Function CopyFolder(ByRef sourcePath As String _
         Next subFolderPath
     End If
     '
-    Dim filePath As Variant
+    Dim FilePath As Variant
     Dim newFilePath As String
     '
-    For Each filePath In GetFiles(fixedSrc, includeSubFolders, True, True)
-        newFilePath = Replace(filePath, fixedSrc, fixedDst)
-        If Not CopyFile(CStr(filePath), newFilePath, failIfExists) Then
+    For Each FilePath In GetFiles(fixedSrc, includeSubFolders, True, True)
+        newFilePath = Replace(FilePath, fixedSrc, fixedDst)
+        If Not CopyFile(CStr(FilePath), newFilePath, failIfExists) Then
             If Not ignoreFailedChildren Then Exit Function
         End If
-    Next filePath
+    Next FilePath
     '
     CopyFolder = True
 End Function
@@ -904,25 +904,25 @@ End Function
 '*******************************************************************************
 'Deletes a file only. Does not support wildcards * ?
 '*******************************************************************************
-Public Function DeleteFile(ByRef filePath As String) As Boolean
-    If LenB(filePath) = 0 Then Exit Function
-    If Not IsFile(filePath) Then Exit Function 'Avoid 'Kill' on folder
+Public Function DeleteFile(ByRef FilePath As String) As Boolean
+    If LenB(FilePath) = 0 Then Exit Function
+    If Not IsFile(FilePath) Then Exit Function 'Avoid 'Kill' on folder
     '
     On Error Resume Next
     #If Windows Then
-        GetFSO.DeleteFile filePath, True
+        GetFSO.DeleteFile FilePath, True
         DeleteFile = (Err.Number = 0)
         If DeleteFile Then Exit Function
         Err.Clear
     #End If
-    SetAttr filePath, vbNormal 'Too costly to do after failing Kill
+    SetAttr FilePath, vbNormal 'Too costly to do after failing Kill
     Err.Clear
-    Kill filePath
+    Kill FilePath
     DeleteFile = (Err.Number = 0)
     On Error GoTo 0
     '
     #If Windows Then
-        If Not DeleteFile Then DeleteFile = CBool(DeleteFileW(StrPtr(filePath)))
+        If Not DeleteFile Then DeleteFile = CBool(DeleteFileW(StrPtr(FilePath)))
     #End If
 End Function
 
@@ -976,7 +976,7 @@ End Function
 '*******************************************************************************
 Private Function DeleteBottomMostFolder(ByRef folderPath As String) As Boolean
     Dim fixedPath As String: fixedPath = BuildPath(folderPath, vbNullString)
-    Dim filePath As Variant
+    Dim FilePath As Variant
     '
     On Error Resume Next
     Kill fixedPath  'Try to batch delete all files (if any)
@@ -988,9 +988,9 @@ Private Function DeleteBottomMostFolder(ByRef folderPath As String) As Boolean
     End If
     On Error GoTo 0
     '
-    For Each filePath In GetFiles(fixedPath, False, True, True)
-        If Not DeleteFile(CStr(filePath)) Then Exit Function
-    Next filePath
+    For Each FilePath In GetFiles(fixedPath, False, True, True)
+        If Not DeleteFile(CStr(FilePath)) Then Exit Function
+    Next FilePath
     '
     On Error Resume Next
     RmDir fixedPath
@@ -1203,19 +1203,19 @@ End Function
 'Retrieves the owner name for a file path
 '*******************************************************************************
 #If Windows Then
-Public Function GetFileOwner(ByRef filePath As String) As String
+Public Function GetFileOwner(ByRef FilePath As String) As String
     Const osi As Long = 1 'OWNER_SECURITY_INFORMATION
     Dim sdSize As Long
     '
     'Get SECURITY_DESCRIPTOR required Buffer Size
-    GetFileSecurity filePath, osi, 0, 0&, sdSize
+    GetFileSecurity FilePath, osi, 0, 0&, sdSize
     If sdSize = 0 Then Exit Function
     '
     'Size the SECURITY_DESCRIPTOR buffer
     Dim sd() As Byte: ReDim sd(0 To sdSize - 1)
     '
     'Get SECURITY_DESCRIPTOR buffer
-    If GetFileSecurity(filePath, osi, sd(0), sdSize, sdSize) = 0 Then
+    If GetFileSecurity(FilePath, osi, sd(0), sdSize, sdSize) = 0 Then
         Exit Function
     End If
     '
@@ -2772,7 +2772,7 @@ End Function
 '*******************************************************************************
 'Returns the required value from an ini file text line based on given tag
 '*******************************************************************************
-Private Function GetTagValue(ByRef filePath As String _
+Private Function GetTagValue(ByRef FilePath As String _
                            , ByRef vTag As String) As String
     Dim bytes() As Byte
     Dim fText As String
@@ -2780,7 +2780,7 @@ Private Function GetTagValue(ByRef filePath As String _
     Dim j As Long
     '
     On Error Resume Next
-    ReadBytes filePath, bytes
+    ReadBytes FilePath, bytes
     fText = bytes
     #If Mac Then
         If Err.Number = 0 Then
@@ -2788,7 +2788,7 @@ Private Function GetTagValue(ByRef filePath As String _
         Else 'Open failed, try AppleScript with no text conversion needed
             Dim tempPath As String
             tempPath = MacScript("return path to startup disk as string") _
-                     & Replace(Mid$(filePath, 2), PATH_SEPARATOR, ":")
+                     & Replace(Mid$(FilePath, 2), PATH_SEPARATOR, ":")
             fText = MacScript("return read file """ & tempPath & """ as string")
         End If
     #End If
@@ -2889,10 +2889,10 @@ End Sub
 '*******************************************************************************
 'Utility - Retrieves all folders from an OneDrive user dat file
 '*******************************************************************************
-Private Sub ReadDirsFromDat(ByRef filePath As String, ByRef outdirs As DirsInfo)
+Private Sub ReadDirsFromDat(ByRef FilePath As String, ByRef outdirs As DirsInfo)
     Dim fileNumber As Long: fileNumber = FreeFile()
     '
-    Open filePath For Binary Access Read As #fileNumber
+    Open FilePath For Binary Access Read As #fileNumber
     Dim size As Long: size = LOF(fileNumber)
     If size = 0 Then GoTo CloseFile
     '
@@ -2929,7 +2929,7 @@ Private Sub ReadDirsFromDat(ByRef filePath As String, ByRef outdirs As DirsInfo)
         lastFileChange = 0
         Do
             i = 0
-            currFileChange = FileDateTime(filePath)
+            currFileChange = FileDateTime(FilePath)
             If currFileChange > lastFileChange Then
                 With outdirs
                     Set .idToIndex = New Collection
@@ -3020,13 +3020,13 @@ End Function
 '*******************************************************************************
 'Utility - Retrieves all folders from an OneDrive user database file
 '*******************************************************************************
-Private Sub ReadDirsFromDB(ByRef filePath As String _
+Private Sub ReadDirsFromDB(ByRef FilePath As String _
                          , ByVal isPersonal As Boolean _
                          , ByRef outdirs As DirsInfo)
-    If Not IsFile(filePath) Then Exit Sub
+    If Not IsFile(FilePath) Then Exit Sub
     Dim fileNumber As Long: fileNumber = FreeFile()
     '
-    Open filePath For Binary Access Read As #fileNumber
+    Open FilePath For Binary Access Read As #fileNumber
     Dim size As Long: size = LOF(fileNumber)
     If size = 0 Then GoTo CloseFile
     '
@@ -3071,7 +3071,7 @@ Private Sub ReadDirsFromDB(ByRef filePath As String _
         idPattern = idPattern & "*"
     End If
     Do
-        Dim currFileChange As Date: currFileChange = FileDateTime(filePath)
+        Dim currFileChange As Date: currFileChange = FileDateTime(FilePath)
         Dim lastFileChange As Date
         '
         i = 0
@@ -3236,7 +3236,7 @@ End Sub
 'Note that if C:\Test\1.txt is valid then C:\Test\\///1.txt will also be valid
 'Most VBA methods consider valid any path separators with multiple characters
 '*******************************************************************************
-Public Function IsFile(ByRef filePath As String) As Boolean
+Public Function IsFile(ByRef FilePath As String) As Boolean
     #If Mac Then
         Const maxFileLen As Long = 259 'To be updated
     #Else
@@ -3246,25 +3246,25 @@ Public Function IsFile(ByRef filePath As String) As Boolean
     Dim fAttr As VbFileAttribute
     '
     On Error Resume Next
-    fAttr = GetAttr(filePath)
+    fAttr = GetAttr(FilePath)
     If Err.Number = errBadFileNameOrNumber Then 'Unicode characters
         #If Mac Then
             
         #Else
-            IsFile = GetFSO().FileExists(filePath)
+            IsFile = GetFSO().FileExists(FilePath)
         #End If
     ElseIf Err.Number = 0 Then
         IsFile = Not CBool(fAttr And vbDirectory)
-    ElseIf Len(filePath) > maxFileLen Then
+    ElseIf Len(FilePath) > maxFileLen Then
         #If Mac Then
 
         #Else
-            If Left$(filePath, 4) = "\\?\" Then
-                IsFile = GetFSO().FileExists(filePath)
-            ElseIf Left$(filePath, 2) = "\\" Then
-                IsFile = GetFSO().FileExists("\\?\UNC" & Mid$(filePath, 2))
+            If Left$(FilePath, 4) = "\\?\" Then
+                IsFile = GetFSO().FileExists(FilePath)
+            ElseIf Left$(FilePath, 2) = "\\" Then
+                IsFile = GetFSO().FileExists("\\?\UNC" & Mid$(FilePath, 2))
             Else
-                IsFile = GetFSO().FileExists("\\?\" & filePath)
+                IsFile = GetFSO().FileExists("\\?\" & FilePath)
             End If
         #End If
     End If
@@ -3421,15 +3421,15 @@ End Function
 '*******************************************************************************
 'Reads a file into an array of Bytes
 '*******************************************************************************
-Public Sub ReadBytes(ByRef filePath As String, ByRef result() As Byte)
-    If Not IsFile(filePath) Then
+Public Sub ReadBytes(ByRef FilePath As String, ByRef result() As Byte)
+    If Not IsFile(FilePath) Then
         Erase result
         Exit Sub
     End If
     '
     Dim fileNumber As Long: fileNumber = FreeFile()
     '
-    Open filePath For Binary Access Read As #fileNumber
+    Open FilePath For Binary Access Read As #fileNumber
     Dim size As Long: size = LOF(fileNumber)
     If size > 0 Then
         ReDim result(0 To size - 1)
@@ -3456,7 +3456,7 @@ Private Sub CreateODDiagnosticsFile()
     Const fileName As String = "DiagnosticsOD.txt"
     Dim accountsInfo As ONEDRIVE_ACCOUNTS_INFO
     Dim fileNumber As Long: fileNumber = FreeFile()
-    Dim filePath As String: filePath = BuildPath(folderPath, fileName)
+    Dim FilePath As String: FilePath = BuildPath(folderPath, fileName)
     Dim res As String
     Dim i As Long
     Dim temp(0 To 2) As String
@@ -3516,7 +3516,7 @@ Private Sub CreateODDiagnosticsFile()
         res = res & vbNewLine
     Next i
     '
-    Open filePath For Output As #fileNumber
+    Open FilePath For Output As #fileNumber
     Print #fileNumber, res
     Close #fileNumber
     '

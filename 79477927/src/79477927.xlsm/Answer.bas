@@ -3,20 +3,20 @@ Option Explicit
 
 Sub DemoGetLocalPath()
 
-
-    Dim FolderName As String
-    FolderName = "Subfolder"
+    Dim SubFolderName As String
+    SubFolderName = "Subfolder"
     
-    Dim FullFileName As String
-    FullFileName = ThisWorkbook.Path & "\" & FolderName & "\"
+    Dim LocalFolderPath As String
+    LocalFolderPath = GetLocalPath(ThisWorkbook.Path)
           
     Dim MyFiles As Collection
-    Set MyFiles = GetFiles(FullFileName)
+    Set MyFiles = GetFiles(LocalFolderPath & "\" & SubFolderName)
           
-    Dim File As Variant
-    For Each File In MyFiles
-        Debug.Print File
+    Dim FilePath As Variant
+    For Each FilePath In MyFiles
+        Debug.Print FilePath
     Next
 
 End Sub
+
 
