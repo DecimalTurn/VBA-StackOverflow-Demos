@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<queryTable xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="xr16" xmlns:xr16="http://schemas.microsoft.com/office/spreadsheetml/2017/revision16" name="ExternalData_1" connectionId="2" xr16:uid="{2F03FB58-6BD3-4A78-8F0B-3DAAEA5B85C1}" autoFormatId="16" applyNumberFormats="0" applyBorderFormats="0" applyFontFormats="1" applyPatternFormats="1" applyAlignmentFormats="0" applyWidthHeightFormats="0">
+  <queryTableRefresh nextId="6">
+    <queryTableFields count="5">
+      <queryTableField id="1" name="ID" tableColumnId="6" />
+      <queryTableField id="2" name="Name" tableColumnId="7" />
+      <queryTableField id="3" name="Age" tableColumnId="8" />
+      <queryTableField id="4" name="Email" tableColumnId="9" />
+      <queryTableField id="5" name="Country" tableColumnId="10" />
+    </queryTableFields>
+  </queryTableRefresh>
+</queryTable>
