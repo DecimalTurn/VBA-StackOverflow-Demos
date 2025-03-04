@@ -1,4 +1,4 @@
-Attribute VB_Name = "BreakingTypeName"
+Attribute VB_Name = "BreakingTypeNameSub"
 Option Explicit
 
 Sub BrokenTypeNameDemo()
