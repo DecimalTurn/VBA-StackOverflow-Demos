@@ -1,0 +1,1 @@
+SO question: https://stackoverflow.com/questions/79484325/vba-option-buttons-clearing-for-unknown-reason
