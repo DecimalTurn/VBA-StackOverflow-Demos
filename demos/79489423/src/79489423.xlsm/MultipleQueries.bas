@@ -12,6 +12,11 @@ Sub testM()
     Call ExecuteM("Query1", "#table({""a"",""b""},{{1,2},{3,4}})")
     Call ExecuteM("Query2", "#table({""c"",""d""},{{1,2},{3,4}})")
     
+    ' Start monitoring queries if not already running
+    If PendingQueries.Count >= 1 Then
+        Application.OnTime Now + TimeValue("00:00:01"), "CheckQueriesRefreshStatus"
+    End If
+    
 End Sub
 
 Public Sub ExecuteM(ByVal QueryName As String, ByVal mCode As String)
@@ -34,10 +39,6 @@ Public Sub ExecuteM(ByVal QueryName As String, ByVal mCode As String)
     ' Refresh asynchronously
     Call qt.Refresh(True)
 
-    ' Start monitoring queries if not already running
-    If PendingQueries.Count = 1 Then
-        Application.OnTime Now + TimeValue("00:00:01"), "CheckQueriesRefreshStatus"
-    End If
 End Sub
 
 Public Sub CheckQueriesRefreshStatus()
